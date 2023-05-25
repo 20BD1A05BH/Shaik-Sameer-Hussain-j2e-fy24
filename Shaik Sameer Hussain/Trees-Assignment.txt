@@ -1,0 +1,214 @@
+PROBLEM-1
+
+class Solution {
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null && q == null) return true;
+        else if (p == null || q == null || p.val != q.val) return false;
+        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
+}
+
+
+PROBLEM-2
+
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        if(root == null) return true;
+        return dfs(root.left,root.right);        
+    }
+    boolean dfs(TreeNode root1,TreeNode root2){        
+        if(root1 == null && root2 == null) return true;
+        if(root1 == null || root2 == null) return false;
+        if(root1.val != root2.val) return false;
+        return dfs(root1.left,root2.right) && dfs(root1.right,root2.left);
+    }
+}
+
+
+PROBLEM-3
+
+
+
+class Solution {
+    public TreeNode invertTree(TreeNode root) {
+        return recurse(root);
+    }
+
+    private TreeNode recurse(TreeNode root) {
+        if (root == null) return null;
+        
+        TreeNode temp = recurse(root.left);
+        root.left = recurse(root.right);
+        root.right = temp;
+        return root; 
+    }
+}
+
+
+
+PROBLEM-4
+
+
+class Solution {
+    public int maxDepth(TreeNode a){
+        if(a==null){
+            return 0;
+        }
+        return 1 + Math.max(maxDepth(a.left),maxDepth(a.right));
+    }
+    public boolean isBalanced(TreeNode root) {
+        if(root==null){
+            return true;
+        }
+        if(Math.abs(maxDepth(root.left)-maxDepth(root.right))<=1){
+            return isBalanced(root.left) && isBalanced(root.right);
+        }
+        return false;
+    }
+}
+
+
+PROBLEM-5
+
+
+class Solution {
+    public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+        if (root1 == null && root2 == null) return null;
+
+        TreeNode rootfinal = new TreeNode();
+
+        rootfinal.val = (root1 != null ? root1.val : 0) + (root2 != null ? root2.val : 0);
+
+        rootfinal.left = mergeTrees((root1 != null ? root1.left : null), (root2 != null ? root2.left : null));
+        rootfinal.right = mergeTrees((root1 != null ? root1.right : null), (root2 != null ? root2.right : null));
+        
+        return rootfinal;
+    }
+}
+
+
+
+PROBLEM-6
+
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        List<Integer>l1=new ArrayList<>();
+     solve(root,l1);
+     for(int i=0;i<l1.size()-1;i++){
+         if(l1.get(i)<l1.get(i+1)){
+             continue;
+         }else{
+             return false;
+         }
+     }
+     return true;
+    }
+    public void solve(TreeNode root,List<Integer>l1){
+        if(root==null){
+            return;
+        }
+        solve(root.left,l1);
+        l1.add(root.val);
+        solve(root.right,l1);
+    }
+}
+
+
+PROBLEM-7
+
+
+
+class Solution {
+    public int kthSmallest(TreeNode root, int k) {
+        ArrayList<Integer> list = new ArrayList<>();
+        inorder(root,list);
+
+        if(k>list.size())
+        return -1;
+
+        return list.get(k-1);
+
+    }
+    public void inorder(TreeNode root, ArrayList<Integer> list)
+    {
+
+        if(root!=null)
+        {
+            inorder(root.left,list);
+            list.add(root.val);
+            inorder(root.right,list);
+        }
+    }
+}
+
+
+
+PROBLEM-8
+
+
+
+class Solution {
+    public TreeNode sortedArrayToBST(int[] nums) {
+        return CreateBST(nums, 0, nums.length - 1);
+    }
+
+    private TreeNode CreateBST(int nums[], int l, int r) {
+        if (l > r) { // Base Condition or Recursion Stoping Condition
+            return null;
+        }
+
+        int mid = (l + r) / 2;
+        TreeNode root = new TreeNode(nums[mid]); // mid value or median 
+        root.left = CreateBST(nums, l, mid - 1); // assign the value for left of subtree that is l to mid -1 for given array
+        root.right = CreateBST(nums, mid + 1, r); // assign the value for right go subtree that is mid+1 to r for given array
+        return root;
+    }
+}
+
+
+
+PROBLEM-8
+
+class Solution {
+    int s=0;
+    int  solve(TreeNode root, int low, int high)
+    {
+              if(root==null){
+                  return 0;
+              }
+              solve(root.left,low,high);
+              if(root.val>=low&&root.val<=high)
+              {
+                  s+=root.val;
+              }
+              solve(root.right,low,high);
+              return s;
+    }
+    public int rangeSumBST(TreeNode root, int low, int high) {
+          solve(root,low,high);
+          return  s;
+    }
+}
+
+
+
+PROBLEM-9
+
+class Solution {
+    public TreeNode searchBST(TreeNode root, int val) {
+        if (root == null) return root;
+        TreeNode curr = root;
+        while (curr != null) {
+            if (curr.val == val) return curr;
+
+            if (val > curr.val) {
+                curr = curr.right;
+            } else {
+                curr = curr.left;
+            }
+        }
+        return null;
+    }
+}
+
+

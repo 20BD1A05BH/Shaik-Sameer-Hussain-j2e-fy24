@@ -1,0 +1,275 @@
+LINKED LIST ASSIGNMENT
+
+PROBLEM-1:
+
+class Solution {
+  public ListNode removeNthFromEnd(ListNode head, int n) {
+    ListNode fast = head, slow = head; // initialize fast and slow to head
+
+    for (int i = 0; i < n; i++) fast = fast.next; // iterate through n elements of fast
+
+    if (fast == null) return head.next; // if fast is null, return head.next
+
+    while (fast.next != null) { // while fast.next is not null
+      fast = fast.next; // increment fast
+      slow = slow.next; // increment slow
+    }
+
+    slow.next = slow.next.next; // set slow.next to slow.next.next
+
+    return head; // return head
+  }
+}
+
+
+PROBLEM-2
+
+public class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode head = new ListNode(0);
+        ListNode handler = head;
+        while(l1 != null && l2 != null) {
+            if (l1.val <= l2.val) {
+                handler.next = l1;
+                l1 = l1.next;
+            } else {
+                handler.next = l2;
+                l2 = l2.next;
+            }
+            handler = handler.next;
+        }
+        
+        if (l1 != null) {
+            handler.next = l1;
+        } else if (l2 != null) {
+            handler.next = l2;
+        }
+        
+        return head.next;
+    }
+}
+
+PROBLEM-3
+
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        if(head == null) return head; //base condition1
+        if(head.next == null) return head; //base condition2
+        ListNode restofNodes = swapPairs(head.next.next); //Function call
+        //Function Implementation
+        ListNode next = head.next; 
+        next.next = head;
+        head.next = restofNodes;
+        return next;
+    }
+}
+
+PROBLEM-4
+
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode nw=head;
+        while(head!=null){
+            if(head.next!=null && head.val==head.next.val){
+                head.next=head.next.next;
+            }
+            else{
+                head=head.next;
+            }
+        }
+        return nw;
+    }
+}
+
+PROBLEM-5
+
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        if(head == null ){
+            return head;
+        }
+        ListNode temp =new ListNode();
+        temp.next = head;
+
+        ListNode curr = temp;
+        while(curr.next != null && curr.next.next != null){
+            if(curr.next.val == curr.next.next.val){
+                int value = curr.next.val;
+        while(curr.next != null && curr.next.val == value){
+            curr.next = curr.next.next;
+        }
+            }else{
+                curr = curr.next;
+            }
+        }
+        return temp.next;
+
+       
+    }
+}
+
+
+PROBLEM-6
+
+class LRUCache {
+     Node head = new Node(0,0);
+     Node tail = new Node(0,0);
+     HashMap<Integer,Node> map = new HashMap<>();
+     int capacity;
+    public LRUCache(int _capacity) {
+        capacity = _capacity;
+        head.next = tail;
+        tail.prev = head;
+    }
+
+    public int get(int key) {
+        if(map.containsKey(key)){
+            Node node  = map.get(key);
+            remove(node);
+            insert(node);
+            return node.value;
+        }
+        else return -1;
+    }
+
+    public void put(int key, int value) {
+        if(map.containsKey(key)){
+            remove(map.get(key));
+        }
+        if(map.size() == capacity){
+            remove(tail.prev);
+
+        }
+        insert(new Node(key,value));
+    }
+     private void remove(Node node){
+         map.remove(node.key);
+         node.prev.next = node.next;
+         node.next.prev = node.prev;
+     }
+     private void insert(Node node){
+         map.put(node.key,node);
+        Node headNext = head.next;
+        head.next = node;
+        node.prev = head;
+        node.next = headNext;
+        headNext.prev = node;
+
+     }
+
+    class Node{
+        Node prev,next;
+        int key,value;
+        Node(int _key,int _val){
+            key = _key;
+            value = _val;
+        }
+    }
+}
+
+PROBLEM-7
+
+class MyCircularDeque {
+    private int[] q;
+    private int front;
+    private int size;
+    private int capacity;
+
+
+    public MyCircularDeque(int k) {
+        q = new int[k];
+        capacity = k;
+    }
+
+
+    public boolean insertFront(int value) {
+        if (isFull()) {
+            return false;
+        }
+        if (!isEmpty()) {
+            front = (front - 1 + capacity) % capacity;
+        }
+        q[front] = value;
+        ++size;
+        return true;
+    }
+
+
+    public boolean insertLast(int value) {
+        if (isFull()) {
+            return false;
+        }
+        int idx = (front + size) % capacity;
+        q[idx] = value;
+        ++size;
+        return true;
+    }
+
+    public boolean deleteFront() {
+        if (isEmpty()) {
+            return false;
+        }
+        front = (front + 1) % capacity;
+        --size;
+        return true;
+    }
+
+
+    public boolean deleteLast() {
+        if (isEmpty()) {
+            return false;
+        }
+        --size;
+        return true;
+    }
+
+
+    public int getFront() {
+        if (isEmpty()) {
+            return -1;
+        }
+        return q[front];
+    }
+
+
+    public int getRear() {
+        if (isEmpty()) {
+            return -1;
+        }
+        int idx = (front + size - 1) % capacity;
+        return q[idx];
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+
+    public boolean isFull() {
+        return size == capacity;
+    }
+}
+
+PROBLEM-8
+
+class Solution {
+    public ListNode mergeInBetween(ListNode list1, int a, int b, ListNode list2) {
+        int ind = 1;
+        ListNode p1 = list1;
+        ListNode p2 = null;
+        while(ind <= b + 1){
+            if(ind < a){
+                p1 = p1.next;
+            }else{              
+                p2 = p2 == null ? p1.next : p2.next;
+            }            
+            ind++;
+        }
+        p1.next = list2;
+        while(list2.next != null){
+            list2 = list2.next;
+        }
+        list2.next = p2;
+        return list1;        
+    }
+}
